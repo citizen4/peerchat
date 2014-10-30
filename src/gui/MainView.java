@@ -38,7 +38,7 @@ public class MainView extends JFrame implements ChatManager.Listener
 
    public MainView(final boolean isLocal)
    {
-      super("PeerChat");
+      super("PeerChat v0.1");
       chatManager = new ChatManager(this,isLocal);
       peerColorMap = new HashMap<>();
       peerList = new ArrayList<>();
@@ -70,12 +70,13 @@ public class MainView extends JFrame implements ChatManager.Listener
       sendButton.setActionCommand("send_cmd");
       sendButton.addActionListener(new GuiActionListener());
 
-      addrFromPanel.add(new JLabel("IP:"));
+      addrFromPanel.add(new JLabel("To(IP):"));
       addrFromPanel.add(addrField);
       addrFromPanel.add(new JLabel("From:"));
       addrFromPanel.add(fromField);
       //msgField.setSize(390,20);
 
+      msgSendPanel.add(new JLabel("Msg: "));
       msgSendPanel.add(msgField);
       msgSendPanel.add(sendButton);
 
