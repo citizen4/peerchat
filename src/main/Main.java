@@ -13,15 +13,11 @@ public class Main
    public static void main(final String[] args)
    {
 
-      if (args.length > 0) {
-         localBindAddress = "127.0.0." + args[0];
-      }
-
       javax.swing.SwingUtilities.invokeLater(new Runnable()
       {
          public void run()
          {
-            new MainView(localBindAddress != null);
+            new MainView();
          }
       });
    }

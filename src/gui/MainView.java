@@ -4,14 +4,7 @@ import main.Main;
 import net.ChatManager;
 import net.Message;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.JTextPane;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
@@ -51,11 +44,9 @@ public class MainView extends JFrame implements ChatManager.Listener
    private JTextField addrField;
    private JTextField fromField;
 
-   public MainView(final boolean isLocal)
+   public MainView()
    {
-      super("PeerChat v0.31" + (isLocal ? " (bind addr: " + Main.localBindAddress + ")" : ""));
-
-      this.isLocal = isLocal;
+      super("PeerChat v0.31"/* + (isLocal ? " (bind addr: " + Main.localBindAddress + ")" : "")*/);
 
       chatManager = new ChatManager(this);
       peerColorMap = new HashMap<>();
@@ -65,8 +56,10 @@ public class MainView extends JFrame implements ChatManager.Listener
 
       setupCtrls();
 
-      addrField.setText(isLocal ? "127.0.0." : "10.101.102.");
       setVisible(true);
+
+      askIsLocal();
+      addrField.setText(isLocal ? "127.0.0." : "10.101.102.");
 
       chatManager.startReceiverThread();
    }
@@ -118,7 +111,7 @@ public class MainView extends JFrame implements ChatManager.Listener
    public void onNewMessage(final Message newMsg,final String peerId)
    {
       if(!peerColorMap.containsKey(peerId)){
-         peerColorMap.put(peerId,PEER_COLORS[peerCounter++%8]);
+         peerColorMap.put(peerId, PEER_COLORS[peerCounter++ % PEER_COLORS.length]);
       }
 
       String displayMsg = "<"+newMsg.FROM+">: "+newMsg.TEXT;
@@ -153,6 +146,20 @@ public class MainView extends JFrame implements ChatManager.Listener
       msgBox.setCharacterAttributes(attribSet, false);
       msgBox.replaceSelection(msg);
    }
+
+   private void askIsLocal()
+   {
+      String lastOctet = JOptionPane.showInputDialog(null, "Choose unique client number:",
+              "Start as local client?", JOptionPane.QUESTION_MESSAGE);
+
+      if (lastOctet != null) {
+         Main.localBindAddress = "127.0.0." + lastOctet;
+         System.out.println(Main.localBindAddress);
+         setTitle(getTitle() + " [" + Main.localBindAddress + "]");
+         isLocal = true;
+      }
+   }
+
 
    private class GuiActionListener extends KeyAdapter implements ActionListener
    {
