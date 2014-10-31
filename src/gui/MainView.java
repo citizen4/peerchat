@@ -46,7 +46,7 @@ public class MainView extends JFrame implements ChatManager.Listener
 
    public MainView()
    {
-      super("PeerChat v0.31"/* + (isLocal ? " (bind addr: " + Main.localBindAddress + ")" : "")*/);
+      super("PeerChat v0.33"/* + (isLocal ? " (bind addr: " + Main.localBindAddress + ")" : "")*/);
 
       chatManager = new ChatManager(this);
       peerColorMap = new HashMap<>();
@@ -149,10 +149,20 @@ public class MainView extends JFrame implements ChatManager.Listener
 
    private void askIsLocal()
    {
-      String lastOctet = JOptionPane.showInputDialog(null, "Choose unique client number:",
-              "Start as local client?", JOptionPane.QUESTION_MESSAGE);
+      String lastOctet = JOptionPane.showInputDialog(null, "Choose unique client number [1..254]:",
+              "Start as local only client?", JOptionPane.QUESTION_MESSAGE);
 
       if (lastOctet != null) {
+
+         try {
+            int octet = Integer.parseInt(lastOctet);
+            if (octet > 254 || octet < 1) {
+               return;
+            }
+         } catch (NumberFormatException e) {
+            return;
+         }
+
          Main.localBindAddress = "127.0.0." + lastOctet;
          System.out.println(Main.localBindAddress);
          setTitle(getTitle() + " [" + Main.localBindAddress + "]");
