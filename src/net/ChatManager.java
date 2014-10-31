@@ -26,7 +26,7 @@ public class ChatManager
    private DatagramSocket sendSocket = null;
    private Thread receiverThread = null;
    private Listener listener = null;
-   private List<String> clientList;
+   //private List<String> clientList;
 
    public ChatManager(final Listener listener)
    {
@@ -34,7 +34,7 @@ public class ChatManager
 
       try {
          sendSocket = new DatagramSocket(0);
-      } catch (SocketException /*| UnknownHostException*/ e) {
+      } catch (SocketException e) {
          e.printStackTrace();
       }
    }
@@ -76,7 +76,6 @@ public class ChatManager
                      recvSocket.receive(packet);
                      id = packet.getAddress().getHostAddress() + ":" + packet.getPort();
                      msg = new String(packet.getData(), "UTF-8");
-                     packetData = null;
                      parsePacket(msg, id);
                   } catch (IOException e) {
                      if (!(e instanceof SocketTimeoutException)) {
