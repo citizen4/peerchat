@@ -5,17 +5,18 @@ package net;
  */
 public class Message
 {
-
+   public Boolean ACK;
    public String FROM;
    public String TEXT;
 
    public Message()
    {
-      this("null","null");
+      this(false, "null", "null");
    }
 
-   public Message(final String from, final String text)
+   public Message(final Boolean ack, final String from, final String text)
    {
+      ACK = ack;
       FROM = from;
       TEXT = text;
    }
